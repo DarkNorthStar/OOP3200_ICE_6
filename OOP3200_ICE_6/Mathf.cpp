@@ -1,3 +1,6 @@
+/*
+ * STARTER CODE
+ */
 #include "Mathf.h"
 
 #include <limits>

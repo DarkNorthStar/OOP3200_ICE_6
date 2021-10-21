@@ -1,3 +1,6 @@
+/*
+ * STARTER CODE
+ */
 #pragma once
 #ifndef __MATH_F__
 #define __MATH_F__
