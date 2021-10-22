@@ -5,6 +5,9 @@
 #include <iostream>
 #include <map>
 
+#include <fstream>
+#include <cstdlib>
+
 #include <vector>
 
 #include "GameObject.h"
@@ -56,12 +59,72 @@ static void CompareGameObjects(GameObject* object1, GameObject* object2)
 int main()
 {
 	// game object map
-	std::map<std::string, GameObject> gameObject;
+	std::map<std::string, GameObject*> gameObjects;
+
+	// makes game objects
+	auto* ship = new GameObject("Ship", 0, 3.0f, 4.0f);
+	auto* enemy = new GameObject("Enemy", 1, 10.0f, 20.0f);
+	
+	// add game objects to map
+	gameObjects[ship->GetName()] = ship;
+	gameObjects[enemy->GetName()] = enemy;
+
+	// Loop through the map
+	for (const auto& game_object : gameObjects)
+	{
+		std::cout << "Key  : " << game_object.first << std::endl;
+		std::cout << "Value: " << std::endl;
+		std::cout << "====================================================================" << std::endl;
+		std::cout << game_object.second->ToString() << std::endl;
+	}
+
+	// Gets distance from ship to enemy in map
+	auto distance = Vector2D<float>::Distance(gameObjects["Ship"]->GetPosition(), gameObjects["Enemy"]->GetPosition());
+
+	// Out to console
+	std::cout << "Distance between: " << gameObjects["Ship"]->GetName() << " and " << gameObjects["Enemy"]->GetName() << " is: " << std::to_string(distance) << std::endl;
+
+	// File
+	std::ofstream outfile("gameObject.txt", std::ios::out);
+	// Out to file
+	outfile << gameObjects["Ship"]->ToFile() << std::endl;
+	outfile << gameObjects["Enemy"]->ToFile() << std::endl;
+	outfile.close();
+	std::ifstream infile("gameObject.txt", std::ios::in);
 
 
+	GameObject* tempGameObject = new GameObject();
+	while(infile >> new GameObject())
+	{
+		int id;
+		float x, y = 0;
+		std::string name;
+		Vector2D<float> position;
+
+		infile >> id >> name;
+		infile.ignore();
+		infile >> x;
+		infile.ignore();
+		infile >> x;
+		
+		auto* tempObject = new GameObject(name, id, x, y);
+		gameObjects[name + " 2"] = tempObject;
+	}
+	infile.close();
 
 
+	// Loop through the map
+	for (const auto& game_object : gameObjects)
+	{
+		std::cout << "Key  : " << game_object.first << std::endl;
+		std::cout << "Value: " << std::endl;
+		std::cout << "====================================================================" << std::endl;
+		std::cout << game_object.second->ToString() << std::endl;
+	}
 
+
+	/*outfile << gameObjects["Ship"]->GetID() << " " << gameObjects["Ship"]->GetName() << " " << gameObjects["Ship"]->GetPosition() << std::endl;
+	outfile << gameObjects["Enemy"]->GetID() << " " << gameObjects["Enemy"]->GetName() << " " << gameObjects["Enemy"]->GetPosition() << std::endl;*/
 
 
 
